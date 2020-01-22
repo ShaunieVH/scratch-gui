@@ -28,10 +28,6 @@ const vmManagerHOC = function (WrappedComponent) {
             ]);
         }
         componentDidMount () {
-            if (window.location.search.indexOf('url=') !== -1) {
-                const extensionURL = window.location.search.match(/url=(https?:\/\/[\w.\/-]+)/)[1];
-                this.props.vm.extensionManager.loadExtensionURL(extensionURL);
-            }
             if (!this.props.vm.initialized) {
                 this.audioEngine = new AudioEngine();
                 this.props.vm.attachAudioEngine(this.audioEngine);
@@ -41,6 +37,13 @@ const vmManagerHOC = function (WrappedComponent) {
             }
             if (!this.props.isPlayerOnly && !this.props.isStarted) {
                 this.props.vm.start();
+            }
+            // Load ZBOS scratch extension
+            this.props.vm.extensionManager.loadExtensionURL('https://qbmt.bitbucket.io/scratch3/extension.js');
+            // Load extension from URL
+            if (window.location.search.indexOf('url=') !== -1) {
+                const extensionURL = window.location.search.match(/url=(https?:\/\/[\w.\/-]+)/)[1];
+                this.props.vm.extensionManager.loadExtensionURL(extensionURL); 
             }
         }
         componentDidUpdate (prevProps) {
